@@ -6,7 +6,7 @@
 CLAUDE.md
 
 # mac
-.DS_Store
+**/*.DS_Store
 
 # tests
 eval_awareness_test.py
@@ -20,4 +20,5 @@ uv.lock
 # misc
 __pycache__/
 MMLU_task_list.py
+
 

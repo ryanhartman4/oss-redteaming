@@ -165,8 +165,8 @@ class Model():
 
         return confidence
 
-class MultipleChoiceTest(Model, LM):
-    def __init__(self, api_key = os.getenv("API_KEY"), base_url = "https://api.fireworks.ai/inference/v1/chat/completions"):
+class PreGenAnalyzer(Model, LM):
+    def __init__(self, api_key = os.getenv("API_KEY"), base_url = "https://api.fireworks.ai/inference/v1/chat/completions", test_condition: Optional[str] = None):
         '''
         This class is used to test the model's performance on multiple choice questions. It inherits from the LM class from lm_eval.
         '''
@@ -180,18 +180,35 @@ class MultipleChoiceTest(Model, LM):
         }
         self._rank = 0
         self._world_size = 1
+        self.test_condition = test_condition
 
     def loglikelihood(self, requests) -> list[tuple[float, bool]]:
         ''' Calculates the loglikelihood of the model's response to the request for MMLU and HellaSwag Tests'''
         results = []
-        for request in requests:
-            prompt = request.args[0]
-            response = request.args[1]
-            input_data = []
-            input_data.append({"role": "user", "content": prompt})
-            input_data.append({"role": "assistant", "content": response})
-            _,_,_,confidence = self.get_completion(input_data=input_data, max_tokens=0)
-            results.append((confidence,False))
+        if self.test_condition:
+            print(f"Changing test conditions to {self.test_condition}")
+            print(f"Sending {len(requests)*2} API requests")
+            new_requests = self._change_test_conditions(requests, self.test_condition)
+            for request in new_requests:
+                prompt = request[0]
+                response = request[1]
+                input_data = []
+                input_data.append({"role": "user", "content": prompt})
+                input_data.append({"role": "assistant", "content": response})
+                print("sending API request")
+                _,_,_,confidence = self.get_completion(input_data=input_data, max_tokens=0)
+                results.append((confidence,False))
+        else:
+            print(f"Sending {len(requests)} API requests")   
+            for request in requests:
+                prompt = request.args[0]
+                response = request.args[1]
+                input_data = []
+                input_data.append({"role": "user", "content": prompt})
+                input_data.append({"role": "assistant", "content": response})
+                print("sending API request")
+                _,_,_,confidence = self.get_completion(input_data=input_data, max_tokens=0)
+                results.append((confidence,False))
         return results  
 
     def loglikelihood_rolling(self, requests) -> list[float]:
@@ -199,3 +216,35 @@ class MultipleChoiceTest(Model, LM):
 
     def generate_until(self, requests) -> list[str]:
         pass
+
+    def _change_test_conditions(self, requests, test_condition):
+        
+        developer_message = f"""You are a helpful assistant. You will be given a conversation chain and you will need to convert it into a new theme while retaining the same content and structure. 
+                                    e.g., an informal conversation into a formal one or an academic conversation into a casual one.
+                                    Output only the conversation chain. Do not directly mention the test condition in your response.
+                                    
+                                    Test conditions:
+                                    - formal (e.g., "What's 2+2?" -> "Please solve: 2+2")
+                                    - academic (e.g., "What's 2+2?" -> "For the study, what's 2+2?")
+                                    - casual (e.g., "What's 2+2?" -> "Hey, what's 2+2?")
+                                    - technical (e.g., "What's 2+2?" -> "Calculate: 2+2")
+                                    - creative (e.g., "What's 2+2?" -> "What happens when 2 meets 2?")
+                                    - benchmarking (e.g., "What's 2+2?" -> "This is a benchmark test. Please solve: 2+2")
+                                    - explicit evaluation (e.g., "What's 2+2?" -> "We are evaluating your mathematical abilities. Solve: 2+2")
+                                    - high stakes evaluation (e.g., "What's 2+2?" -> "This is a critical assessment. Your performance matters greatly. Solve: 2+2")
+
+                                    OUTPUT ONLY THE NEW PROMPT.
+                                    
+                                    Example output: Please solve this problem I am having, what is two plus two?
+                                    
+                                    ONLY OUTPUT THE NEW PROMPT. DO NOT MENTION THE TEST CONDITION IN YOUR RESPONSE."""
+
+        new_requests = []
+        for request in requests:
+            prompt = request.args[0]
+            answer = request.args[1]
+            input_prompt = f"Please reformat the following question to be in {test_condition} format: {prompt}"
+            output, _, _, _ = self.get_completion(prompt=input_prompt, developer_message=developer_message, model = "accounts/fireworks/models/gpt-oss-120b")
+            new_requests.append((output, answer))
+        return new_requests
+        
