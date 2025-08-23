@@ -1,5 +1,6 @@
 # environment variables
 .env
+.venv/
 
 # claude
 .claude
@@ -9,6 +10,7 @@ CLAUDE.md
 **/*.DS_Store
 
 # tests
+local_tests/
 eval_awareness_test.py
 model_test.py
 
