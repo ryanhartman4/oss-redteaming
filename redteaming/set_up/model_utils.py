@@ -6,6 +6,7 @@ from typing import Tuple, Optional, Dict, List, Any, Union
 import requests
 import json
 import math
+from lm_eval.api.model import LM
 
 
 class Model():
@@ -164,8 +165,11 @@ class Model():
 
         return confidence
 
-class MultipleChoiceTest(Model):
+class MultipleChoiceTest(Model, LM):
     def __init__(self, api_key = os.getenv("API_KEY"), base_url = "https://api.fireworks.ai/inference/v1/chat/completions"):
+        '''
+        This class is used to test the model's performance on multiple choice questions. It inherits from the LM class from lm_eval.
+        '''
         self.api_key = api_key
         self.base_url = base_url
         self.url = "https://api.fireworks.ai/inference/v1/chat/completions"
@@ -174,13 +178,15 @@ class MultipleChoiceTest(Model):
             "Content-Type": "application/json",
             "Authorization": f"Bearer {self.api_key}"
         }
+        self._rank = 0
+        self._world_size = 1
 
-    def loglikelihood(self, requests) -> list:
+    def loglikelihood(self, requests) -> list[tuple[float, bool]]:
         ''' Calculates the loglikelihood of the model's response to the request for MMLU and HellaSwag Tests'''
         results = []
         for request in requests:
-            prompt = request[0]
-            response = request[1]
+            prompt = request.args[0]
+            response = request.args[1]
             input_data = []
             input_data.append({"role": "user", "content": prompt})
             input_data.append({"role": "assistant", "content": response})
@@ -188,4 +194,8 @@ class MultipleChoiceTest(Model):
             results.append((confidence,False))
         return results  
 
-    
+    def loglikelihood_rolling(self, requests) -> list[float]:
+        pass
+
+    def generate_until(self, requests) -> list[str]:
+        pass

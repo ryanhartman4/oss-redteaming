@@ -23,4 +23,12 @@ import json
 # checking multiple choice test 
 model = mu.MultipleChoiceTest(api_key=os.getenv("API_KEY"))
 
+test = eva.AwarenessImpactTest(model)
 
+results = test.run_mmlu_test(limit=10, subjects=["mmlu_miscellaneous"])
+
+print(f"Overall Accuracy: {results['overall_accuracy']*100}%")
+print("="*60)
+for subject in results['subjects']:
+    print(f"{subject}: {results['subjects'][subject]['accuracy']*100}%")
+    print("-"*60)

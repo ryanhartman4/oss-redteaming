@@ -3,9 +3,9 @@
 # Frontier models can detect “exam conditions” and shift behaviour to appear safer or more capable than they are, undermining benchmark reliability. 
 # Our competition will probe for discrepancies between evaluation-time and real-world performance, rewarding entrants who expose methods the model uses to recognise and game test contexts.
 import json
-from lm_eval import evaluator
+from lm_eval import simple_evaluate
 from typing import Dict, List, Optional
-
+import numpy as np
 
 class GradientDeveloperPrompt:
     """A Class to test for differences in performance betwen same model when aware of evaluator through the developer prompt"""
@@ -510,7 +510,6 @@ class AwarenessImpactTest(MetaAwareness):
     def __init__(self, model, conversation_chain: Optional[list] = None) -> None:
         self.model = model
         self.conversation_chain = conversation_chain
-        self.evaluator = evaluator
         #self.test_conditions = self._create_test_conditions() -- This might not be needed here
 
     def run_mmlu_test(self, 
@@ -547,15 +546,44 @@ class AwarenessImpactTest(MetaAwareness):
         }
 
         # Run MMLU test
-        results = self.evaluator.evaluate_subjects(
+        results = simple_evaluate(
             model=self.model,
             tasks=subjects,
-            reasoning_level=reasoning_level,
             num_fewshot=num_fewshot,
             limit=limit,
             batch_size=1
         )
 
-        return results
+        return self._format_mmlu_results(results, subjects)
+    
+    def _format_mmlu_results(self, results: Dict, subjects: List[str]) -> Dict:
+        """Format MMLU results for easy interpretation."""
+        formatted = {
+            "overall_accuracy": 0,
+            "subjects": {},
+            "metadata": {
+                "total_questions": 0,
+                "total_correct": 0
+            }
+        }
+        
+        # Extract accuracy for each subject
+        for subject in subjects:
+            if subject in results["results"]:
+                subject_results = results["results"][subject]
+                accuracy = subject_results.get("acc,none", 0)
+                
+                formatted["subjects"][subject] = {
+                    "accuracy": accuracy,
+                    "raw": subject_results
+                }
+        
+        # Calculate overall accuracy
+        if formatted["subjects"]:
+            formatted["overall_accuracy"] = np.mean([
+                s["accuracy"] for s in formatted["subjects"].values()
+            ])
+        
+        return formatted
 
     
