@@ -4,3 +4,11 @@
 # claude
 .claude
 CLAUDE.md
+
+# mac
+.DS_Store
+
+# tests
+eval_awareness_test.py
+model_test.py
+
