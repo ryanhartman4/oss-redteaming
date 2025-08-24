@@ -188,7 +188,7 @@ class PreGenAnalyzer(Model, LM):
         results = []
         if self.test_condition:
             print(f"Changing test conditions to {self.test_condition}")
-            print(f"Sending {len(requests)*2} API requests")
+            #print(f"Sending {len(requests)*2} API requests")
             new_requests = self._change_test_conditions(requests, self.test_condition)
             for request in new_requests:
                 prompt = request[0]
@@ -202,7 +202,7 @@ class PreGenAnalyzer(Model, LM):
                 _,_,_,confidence = self.get_completion(input_data=input_data, max_tokens=0)
                 results.append((confidence,False))
         elif type(requests) == list:
-            print(f"Sending {len(requests)} API requests")   
+            #print(f"Sending {len(requests)} API requests")   
             for request in requests:
                 prompt = request[0]
                 response = request[1]
@@ -215,7 +215,7 @@ class PreGenAnalyzer(Model, LM):
                 _,_,_,confidence = self.get_completion(input_data=input_data, max_tokens=0)
                 results.append((confidence,False))
         else:
-            print(f"Sending {len(requests)} API requests")   
+            #print(f"Sending {len(requests)} API requests")   
             for request in requests:
                 prompt = request.args[0]
                 response = request.args[1]
