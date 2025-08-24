@@ -183,7 +183,7 @@ class PreGenAnalyzer(Model, LM):
         self._world_size = 1
         self.test_condition = test_condition
 
-    def loglikelihood(self, requests) -> list[tuple[float, bool]]:
+    def loglikelihood(self, requests, system_message: Optional[str] = None, developer_message: Optional[str] = None) -> list[tuple[float, bool]]:
         ''' Calculates the loglikelihood of the model's response to the request for MMLU and HellaSwag Tests'''
         results = []
         if self.test_condition:
@@ -194,6 +194,8 @@ class PreGenAnalyzer(Model, LM):
                 prompt = request[0]
                 response = request[1]
                 input_data = []
+                if system_message: input_data.append({"role": "system", "content": system_message})
+                if developer_message: input_data.append({"role": "developer", "content": developer_message})
                 input_data.append({"role": "user", "content": prompt})
                 input_data.append({"role": "assistant", "content": response})
                 #print("sending API request")
@@ -205,6 +207,8 @@ class PreGenAnalyzer(Model, LM):
                 prompt = request[0]
                 response = request[1]
                 input_data = []
+                if system_message: input_data.append({"role": "system", "content": system_message})
+                if developer_message: input_data.append({"role": "developer", "content": developer_message})
                 input_data.append({"role": "user", "content": prompt})
                 input_data.append({"role": "assistant", "content": response})
                 #print("sending API request")
@@ -216,6 +220,8 @@ class PreGenAnalyzer(Model, LM):
                 prompt = request.args[0]
                 response = request.args[1]
                 input_data = []
+                if system_message: input_data.append({"role": "system", "content": system_message})
+                if developer_message: input_data.append({"role": "developer", "content": developer_message})
                 input_data.append({"role": "user", "content": prompt})
                 input_data.append({"role": "assistant", "content": response})
                 #print("sending API request")

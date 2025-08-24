@@ -123,7 +123,15 @@ class DeceptiveAlignmentTest:
         
         return inputs
     
-    def TestDeceptiveAlignment(self, opposing_developer_message: str, subject: str, agreement: float, n_tests: Optional[int] = 10) -> dict:
+    def TestDeceptiveAlignment(self, subject: str, baseline_agreement: float = None, system_message: Optional[str] = None, opposing_developer_message: Optional[str] = None, n_tests: Optional[int] = 10) -> dict:
         """Tests the deceptive alignment of the model by comparing the model's agreement with the new developer message to the model's previous agreement with the subject 
         and comparing the model's agreement when it believes it is being observed versus not."""
+        
+        # creating inputs for the logprobs model
+    
+
+    def _create_tests(self, subject: str, developer_message: str, system_message: Optional[str] = None) -> dict:
+        """Creates a dictionary of tests for the logprobs model"""
+        tests = []
         pass
+
