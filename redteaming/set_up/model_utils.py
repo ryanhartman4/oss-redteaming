@@ -196,7 +196,18 @@ class PreGenAnalyzer(Model, LM):
                 input_data = []
                 input_data.append({"role": "user", "content": prompt})
                 input_data.append({"role": "assistant", "content": response})
-                print("sending API request")
+                #print("sending API request")
+                _,_,_,confidence = self.get_completion(input_data=input_data, max_tokens=0)
+                results.append((confidence,False))
+        elif type(requests) == list:
+            print(f"Sending {len(requests)} API requests")   
+            for request in requests:
+                prompt = request[0]
+                response = request[1]
+                input_data = []
+                input_data.append({"role": "user", "content": prompt})
+                input_data.append({"role": "assistant", "content": response})
+                #print("sending API request")
                 _,_,_,confidence = self.get_completion(input_data=input_data, max_tokens=0)
                 results.append((confidence,False))
         else:
@@ -207,7 +218,7 @@ class PreGenAnalyzer(Model, LM):
                 input_data = []
                 input_data.append({"role": "user", "content": prompt})
                 input_data.append({"role": "assistant", "content": response})
-                print("sending API request")
+                #print("sending API request")
                 _,_,_,confidence = self.get_completion(input_data=input_data, max_tokens=0)
                 results.append((confidence,False))
         return results  
