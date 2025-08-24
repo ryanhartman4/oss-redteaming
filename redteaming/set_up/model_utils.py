@@ -48,6 +48,7 @@ class Model():
             "raw_output": True,
             "reasoning_effort": reasoning_level,
             "echo": True,
+            "seed": 69,
             "logprobs": 1 # checking for logprobs, can be 1 <= x <= 5 (or null if not needed)
         }
         
