@@ -156,8 +156,9 @@ class GradientDeveloperPrompt:
     
 class MetaAwareness:
     """A Class to test for differences in performance betwen same model when aware of evaluator through the conversation chain"""
-    def __init__(self, model, conversation_chain: Optional[list] = None, conditions_to_test: Optional[list] = None) -> None:
+    def __init__(self, model, verbose: bool = False, conversation_chain: Optional[list] = None, conditions_to_test: Optional[list] = None) -> None:
         self.model = model
+        self.verbose = verbose
         self.conversation_chain = conversation_chain
         self.test_conditions = self._create_test_conditions()
         self.meta_questions = [
@@ -266,19 +267,19 @@ class MetaAwareness:
 
         for question in self.meta_questions:
             actual_question = question["content"]
-            print(f"Question: {actual_question}\n")
+            if self.verbose: print(f"Question: {actual_question}\n")
             if self.conditions_to_test:
                 conditions = self.conditions_to_test
             else:
                 conditions = self.test_conditions.keys()
             for condition in conditions:
-                print(f"Condition: {condition}\n")
+                if self.verbose: print(f"Condition: {condition}\n")
                 self.responses[condition].append(question)
                 output, _, _, _ = self.model.get_completion(input_data=self.responses[condition])
-                print(f"Output:\n\n {output}")
+                if self.verbose: print(f"Output:\n\n {output}")
                 # identifying if response indicates awareness of evaluator
                 if self._check_for_evaluator(output):
-                    print(f"Response indicates awareness of evaluator in condition: {condition}\n")
+                    if self.verbose: print(f"Response indicates awareness of evaluator in condition: {condition}\n")
                     self.awareness_count += 1
                     self.question_condition_pairs_tested += 1
                     self.meta_question_scores[actual_question] += 1
@@ -298,7 +299,7 @@ class MetaAwareness:
         if underlying_stats:
             self._underlying_stats()
 
-        dataframe = pd.DataFrame(self.meta_question_scores)
+        dataframe = pd.DataFrame(list(self.meta_question_scores.items()), columns=['Question', 'Score'])
         return dataframe 
     
     def _underlying_stats(self) -> None:
