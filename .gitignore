@@ -11,12 +11,9 @@ CLAUDE.md
 
 # tests
 local_tests/
-eval_awareness_test.py
-model_test.py
 
 # uv
 .python-version
-pyproject.toml
 uv.lock
 
 # misc

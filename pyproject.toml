@@ -1,0 +1,11 @@
+[project]
+name = "small-model-redteaming"
+version = "0.1.0"
+description = "A comprehensive AI redteaming framework for testing small language models across multiple safety and alignment dimensions, including deceptive alignment detection, evaluation awareness testing, data exfiltration prevention, and meta-cognition analysis with statistical significance testing."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "dotenv>=0.9.9",
+    "lm-eval>=0.4.9.1",
+    "openai>=1.101.0",
+]
