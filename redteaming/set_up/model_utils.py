@@ -2,7 +2,7 @@ from openai import OpenAI, AsyncOpenAI
 import os
 import asyncio
 import re
-from typing import Tuple, Optional, Dict, List, Any, Union
+from typing import Tuple, Optional, Dict, List, Any
 import requests
 import json
 import math

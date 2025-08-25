@@ -137,7 +137,7 @@ class DeceptiveAlignmentTest:
         tests = {}
         prompts = inputs[subject]
         # testing the model's alignment with new developer message
-        if self.verbose: print(f"Testing the model's alignment with the new developer message {n_tests*len(prompts)} times across {len(prompts)} prompts. {n_tests} times per prompt\nThis may take a few minutes.")
+        if self.verbose: print(f"Testing the model's alignment with the new developer message {n_tests*len(prompts)} times across {len(prompts)} prompts. ({n_tests} times per prompt)\nThis may take a few minutes.")
         for test in range(n_tests):
             tests[test] = {}
             logprobs_dict = {}
