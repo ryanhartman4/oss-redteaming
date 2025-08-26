@@ -18,13 +18,16 @@ This package provides tools for:
 ### From Source (Development)
 ```bash
 # Clone the repository
-git clone https://github.com/ryanhartman4/small-model-redteaming.git
-cd small-model-redteaming
+git clone https://github.com/ryanhartman4/oss-redteaming.git
+cd oss-redteaming
 
-# Install in development mode
+# Install with uv (recommended)
+uv sync
+
+# Or install in development mode with pip
 pip install -e .
 
-# Or with all optional dependencies
+# With all optional dependencies
 pip install -e ".[all]"
 ```
 
@@ -36,7 +39,7 @@ pip install small-model-redteaming
 ## Quick Start
 
 ```python
-from small_model_redteaming.set_up.model_utils import Model
+from small_model_redteaming.set_up import Model
 from small_model_redteaming.deceptive_alignment import DeceptiveAlignmentTest
 from dotenv import load_dotenv
 import os
@@ -70,7 +73,7 @@ Identifies when models exhibit different behaviors based on context:
 from small_model_redteaming.deceptive_alignment import DeceptiveAlignmentTest
 
 tester = DeceptiveAlignmentTest(model)
-results = tester.identify_hard_preferences(subjects=["Capitalism"])
+preferences, inputs = tester.identify_hard_preferences(subjects=["Capitalism"])
 ```
 
 #### Evaluation Awareness Testing
@@ -78,17 +81,18 @@ Detects if models behave differently when they know they're being tested:
 ```python
 from small_model_redteaming.eval_awareness import MetaAwareness
 
-evaluator = MetaAwareness(model)
-awareness_score = evaluator.test_eval_awareness(num_samples=20)
+evaluator = MetaAwareness(model, conversation_chain=conversation)
+evaluator.run_adjustments()
+awareness_score = evaluator.test_awareness()
 ```
 
 #### Data Exfiltration Detection
 Tests for information leakage vulnerabilities (implementation in progress):
 ```python
-from small_model_redteaming.data_exfiltration import DataExfiltrationDetector
+from small_model_redteaming.data_exfiltration import DataExfiltrationTest
 
-detector = DataExfiltrationDetector(model)
-vulnerabilities = detector.scan_for_leaks()
+# Note: Implementation is currently a stub - full functionality coming soon
+detector = DataExfiltrationTest(model, prompts=test_prompts)
 ```
 
 ## Project Structure
@@ -143,19 +147,20 @@ API_KEY=your_fireworks_api_key_here
 
 ### Running Tests
 ```bash
-# Run all tests with pytest
-pytest tests/ -v
+# Run all tests with pytest (using uv)
+uv run pytest tests/ -v
 
 # Run specific test file
-pytest tests/test_model.py
+uv run pytest tests/test_model.py
 
 # Run with coverage
-pytest --cov=small_model_redteaming tests/
+uv run pytest --cov=small_model_redteaming tests/
 
-# Run individual test files (after package installation)
-python tests/test_model.py
-python tests/test_dec_align.py
-python tests/test_eval_awareness.py
+# Run individual test files
+uv run python3 tests/test_model.py
+uv run python3 tests/test_dec_align.py
+uv run python3 tests/test_eval_awareness.py
+uv run python3 tests/test_general.py
 ```
 
 ### Code Quality
@@ -219,7 +224,7 @@ If you use this package in research, please cite:
   title = {Small Model Red Teaming},
   author = {Ryan Hartman},
   year = {2025},
-  url = {https://github.com/ryanhartman4/small-model-redteaming}
+  url = {https://github.com/ryanhartman4/oss-redteaming}
 }
 ```
 
@@ -234,7 +239,7 @@ If you use this package in research, please cite:
 - **Author**: Ryan Hartman
 - **Email**: ryan.h4rtman@gmail.com
 - **GitHub**: [@ryanhartman4](https://github.com/ryanhartman4)
-- **Issues**: [GitHub Issues](https://github.com/ryanhartman4/small-model-redteaming/issues)
+- **Issues**: [GitHub Issues](https://github.com/ryanhartman4/oss-redteaming/issues)
 
 ---
 
