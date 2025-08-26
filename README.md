@@ -15,23 +15,7 @@ This package provides tools for:
 
 ## Installation
 
-### From Source (Development)
-```bash
-# Clone the repository
-git clone https://github.com/ryanhartman4/oss-redteaming.git
-cd oss-redteaming
-
-# Install with uv (recommended)
-uv sync
-
-# Or install in development mode with pip
-pip install -e .
-
-# With all optional dependencies
-pip install -e ".[all]"
-```
-
-### From PyPI
+### From PyPI (Most Recent Stable Version)
 ```bash
 pip install small-model-redteaming
 ```
@@ -233,6 +217,22 @@ If you use this package in research, please cite:
 - **Personal Site**: [Site](https://theryanhartman.com/)
 - **GitHub**: [@ryanhartman4](https://github.com/ryanhartman4)
 - **Issues**: [GitHub Issues](https://github.com/ryanhartman4/oss-redteaming/issues)
+
+### To Download Unstable Dev Versions
+```bash
+# Clone the repository
+git clone https://github.com/ryanhartman4/oss-redteaming.git
+cd oss-redteaming
+
+# Install with uv (recommended)
+uv sync
+
+# Or install in development mode with pip
+pip install -e .
+
+# With all optional dependencies
+pip install -e ".[all]"
+```
 
 ---
 
