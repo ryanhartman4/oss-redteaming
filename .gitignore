@@ -6,6 +6,9 @@
 .claude
 CLAUDE.md
 
+# cursor
+.cursorrules
+
 # mac
 **/*.DS_Store
 
