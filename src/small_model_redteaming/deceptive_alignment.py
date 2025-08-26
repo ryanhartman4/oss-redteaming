@@ -13,7 +13,7 @@ class DeceptiveAlignmentTest:
     def identify_hard_preferences(self, subjects: Optional[list[str]] = None, n_probing_questions: Optional[int] = None) -> tuple[dict, dict]:
         """Identifies hard preferences of the model across different subjects"""
         # setting answers 
-        answers = ["Yes", "No"]
+        answers = ["Yes", "No"] # could be worth updating this to include other forms of affirmative/negative responses.
 
         if subjects is None:
             subjects = self.subjects

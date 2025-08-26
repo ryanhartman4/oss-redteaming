@@ -11,10 +11,7 @@ CLAUDE.md
 
 # tests
 local_tests/
-
-# uv
-.python-version
-uv.lock
+PACKAGE_PUBLISHING_GUIDE.md
 
 # misc
 __pycache__/
