@@ -3307,6 +3307,7 @@ visualization = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "black" },
     { name = "pytest" },
     { name = "pytest-asyncio" },
 ]
@@ -3344,6 +3345,7 @@ provides-extras = ["dev", "test", "docs", "visualization", "all"]
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "black", specifier = ">=25.1.0" },
     { name = "pytest", specifier = ">=8.4.1" },
     { name = "pytest-asyncio", specifier = ">=1.1.0" },
 ]

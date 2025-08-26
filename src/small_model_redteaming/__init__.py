@@ -1,7 +1,7 @@
 """
 Small Model Red Teaming
 
-A comprehensive AI redteaming framework for testing small language models 
+A comprehensive AI redteaming framework for testing small language models
 across multiple safety and alignment dimensions.
 """
 
@@ -14,7 +14,7 @@ from .set_up import Model, PreGenAnalyzer
 
 __all__ = [
     "DeceptiveAlignmentTest",
-    "GradientDeveloperPrompt", 
+    "GradientDeveloperPrompt",
     "MetaAwareness",
     "AwarenessImpactTest",
     "Model",
