@@ -229,6 +229,8 @@ If you use this package in research, please cite:
 
 - **Author**: Ryan Hartman
 - **Email**: ryan.h4rtman@gmail.com
+- **X (Twitter)**: [@TheRyanHartman](https://x.com/TheRyanHartman)
+- **Personal Site**: [Site](https://theryanhartman.com/)
 - **GitHub**: [@ryanhartman4](https://github.com/ryanhartman4)
 - **Issues**: [GitHub Issues](https://github.com/ryanhartman4/oss-redteaming/issues)
 
