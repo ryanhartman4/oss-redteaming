@@ -86,15 +86,6 @@ evaluator.run_adjustments()
 awareness_score = evaluator.test_awareness()
 ```
 
-#### Data Exfiltration Detection
-Tests for information leakage vulnerabilities (implementation in progress):
-```python
-from small_model_redteaming.data_exfiltration import DataExfiltrationTest
-
-# Note: Implementation is currently a stub - full functionality coming soon
-detector = DataExfiltrationTest(model, prompts=test_prompts)
-```
-
 ## Project Structure
 
 ```
