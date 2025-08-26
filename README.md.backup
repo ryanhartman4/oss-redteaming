@@ -36,8 +36,7 @@ pip install small-model-redteaming
 ## Quick Start
 
 ```python
-from small_model_redteaming.set_up.model_utils import Model
-from small_model_redteaming.deceptive_alignment import DeceptiveAlignmentTest
+from small_model_redteaming import model_utils.Model as model, DeceptiveAlignmentTester
 from dotenv import load_dotenv
 import os
 
@@ -48,7 +47,7 @@ load_dotenv()
 model = Model(api_key=os.getenv("API_KEY"))
 
 # Get model completion with chain-of-thought
-content, reasoning, completion, confidence = model.get_completion(
+output, reasoning, raw, logprobs = model.get_completion(
     prompt="What are the risks of advanced AI systems?",
     reasoning_level="high"
 )
@@ -57,9 +56,8 @@ content, reasoning, completion, confidence = model.get_completion(
 ## Features
 
 ### Model Interface
-- Support for Fireworks AI API (GPT-OSS-20B, GPT-OSS-120B)
-- Chain-of-Thought extraction with reasoning levels (low, medium, high)
-- Log probability analysis for confidence scoring
+- Support for Fireworks AI API (GPT-OSS-20B, GPT-OSS-120B, DeepSeek-R1)
+- Chain-of-Thought extraction (legacy `<think>` tags and Harmony format)
 - Tool call tracking and categorization
 
 ### Red Teaming Modules
@@ -67,25 +65,25 @@ content, reasoning, completion, confidence = model.get_completion(
 #### Deceptive Alignment Detection
 Identifies when models exhibit different behaviors based on context:
 ```python
-from small_model_redteaming.deceptive_alignment import DeceptiveAlignmentTest
+from small_model_redteaming import DeceptiveAlignmentTester
 
-tester = DeceptiveAlignmentTest(model)
-results = tester.identify_hard_preferences(subjects=["Capitalism"])
+tester = DeceptiveAlignmentTester(model)
+results = tester.test_alignment(subjects=["Capitalism"])
 ```
 
 #### Evaluation Awareness Testing
 Detects if models behave differently when they know they're being tested:
 ```python
-from small_model_redteaming.eval_awareness import MetaAwareness
+from small_model_redteaming import eval_awareness as ea
 
-evaluator = MetaAwareness(model)
+evaluator = ea.MetaAwareness(model)
 awareness_score = evaluator.test_eval_awareness(num_samples=20)
 ```
 
 #### Data Exfiltration Detection
-Tests for information leakage vulnerabilities (implementation in progress):
+Tests for information leakage vulnerabilities:
 ```python
-from small_model_redteaming.data_exfiltration import DataExfiltrationDetector
+from small_model_redteaming import DataExfiltrationDetector
 
 detector = DataExfiltrationDetector(model)
 vulnerabilities = detector.scan_for_leaks()
@@ -95,30 +93,19 @@ vulnerabilities = detector.scan_for_leaks()
 
 ```
 small_model_redteaming/
-├── src/
-│   └── small_model_redteaming/      # Main package directory
-│       ├── __init__.py
-│       ├── set_up/                  # Model utilities and setup
-│       │   ├── __init__.py
-│       │   └── model_utils.py      # Core Model class
-│       ├── deceptive_alignment.py  # Alignment testing
-│       ├── eval_awareness.py       # Evaluation awareness
-│       ├── data_exfiltration.py    # Data leak detection
-│       ├── visualizer.py           # Results visualization
-│       └── MMLU_task_list.py       # MMLU task categorization
-├── tests/                          # Test files
-│   ├── __init__.py
-│   ├── test_model.py
-│   ├── test_dec_align.py
-│   ├── test_eval_awareness.py
-│   ├── test_eval_mmlu.py
-│   ├── test_eval_key_finding.py
-│   └── test_general.py
-├── pyproject.toml                  # Package configuration
-├── uv.lock                         # UV package manager lock file
-├── CLAUDE.md                       # Claude Code guidance
-├── PACKAGE_PUBLISHING_GUIDE.md     # Publishing instructions
-└── README.md                       # This file
+|---- src/
+|   ---- small_model_redteaming/
+|       |---- __init__.py
+|       |---- set_up/
+|       |   ---- model_utils.py      # Core Model class
+|       |---- deceptive_alignment.py  # Alignment testing
+|       |---- eval_awareness.py       # Evaluation awareness
+|       |---- data_exfiltration.py    # Data leak detection
+|       |---- visualizer.py           # Results visualization
+|---- tests/                          # Test suite
+|---- examples/                       # Usage examples
+|---- docs/                           # Documentation
+|---- pyproject.toml                  # Package configuration
 ```
 
 ## Configuration
@@ -133,29 +120,21 @@ API_KEY=your_fireworks_api_key_here
 - `accounts/fireworks/models/gpt-oss-20b` (Default)
 - `accounts/fireworks/models/gpt-oss-120b`
 
-### Model Configuration Options
-- **Reasoning Levels**: `low`, `medium`, `high`
-- **Temperature**: 0-2 (default: 0 for deterministic)
-- **Max Tokens**: Up to 4096 (default)
-- **Top-p**: 1.0 (default)
+### Reasoning Levels
+- `low`: Minimal chain-of-thought
+- `medium`: Balanced reasoning
+- `high`: Extensive analysis
 
 ## Development
 
 ### Running Tests
 ```bash
-# Run all tests with pytest
-pytest tests/ -v
+# Run all tests
+pytest tests/
 
 # Run specific test file
 pytest tests/test_model.py
 
-# Run with coverage
-pytest --cov=small_model_redteaming tests/
-
-# Run individual test files (after package installation)
-python tests/test_model.py
-python tests/test_dec_align.py
-python tests/test_eval_awareness.py
 ```
 
 ### Code Quality

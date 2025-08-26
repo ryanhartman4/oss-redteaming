@@ -2,6 +2,8 @@
 
 This guide provides comprehensive instructions for converting the red teaming codebase into a publishable Python package.
 
+> **Important Note**: The package has been renamed from `redteaming` to `small_model_redteaming` to avoid naming conflicts and better describe its purpose. All imports and references in this guide use the new name.
+
 ## Table of Contents
 1. [Package Structure Organization](#1-package-structure-organization)
 2. [Package Configuration](#2-package-configuration-pyprojecttoml)
@@ -22,7 +24,7 @@ This guide provides comprehensive instructions for converting the red teaming co
 ### Current Structure
 ```
 small_model_redteaming/
-├── redteaming/
+├── small_model_redteaming/  # Main package directory (renamed from redteaming)
 ├── local_tests/
 ├── CLAUDE.md
 └── .env
@@ -37,7 +39,7 @@ small_model_redteaming/
 ├── CHANGELOG.md               # Version history
 ├── .gitignore                 # Git ignore rules
 ├── src/                       # Source code directory
-│   └── redteaming/           # Your package
+│   └── small_model_redteaming/  # Your package (renamed from redteaming)
 │       ├── __init__.py       # Package initialization
 │       ├── set_up/
 │       │   ├── __init__.py
@@ -62,10 +64,10 @@ small_model_redteaming/
 ### Migration Commands
 ```bash
 # Create new structure
-mkdir -p src/redteaming tests examples docs
+mkdir -p src/small_model_redteaming tests examples docs
 
 # Move existing code
-mv redteaming/* src/redteaming/
+mv small_model_redteaming/* src/small_model_redteaming/
 mv local_tests/* tests/
 
 # Rename test files to follow pytest convention
@@ -163,7 +165,7 @@ Issues = "https://github.com/yourusername/small-model-redteaming/issues"
 where = ["src"]
 
 [tool.setuptools.package-data]
-redteaming = ["*.json", "*.yaml", "*.txt"]
+small_model_redteaming = ["*.json", "*.yaml", "*.txt"]
 
 [tool.black]
 line-length = 120
@@ -233,7 +235,7 @@ pip install -e ".[eval]"
 
 ### Version Management
 ```python
-# src/redteaming/__init__.py
+# src/small_model_redteaming/__init__.py
 __version__ = "0.1.0"
 
 from .deceptive_alignment import DeceptiveAlignmentTest
@@ -267,8 +269,8 @@ pip install small-model-redteaming
 
 ## Quick Start
 ```python
-from redteaming import DeceptiveAlignmentTest
-from redteaming.set_up import Model
+from small_model_redteaming import DeceptiveAlignmentTest
+from small_model_redteaming.set_up import Model
 
 # Initialize model
 model = Model(api_key="your-api-key")
@@ -296,7 +298,7 @@ If you use this package in research, please cite:
 ```bibtex
 @software{small_model_redteaming,
   title = {Small Model Red Teaming},
-  year = {2024},
+  year = {2025},
   url = {https://github.com/...}
 }
 ```
@@ -329,7 +331,7 @@ def test_deceptive_alignment(self, subject: str, baseline_agreement: float) -> D
 ```python
 # tests/test_model_utils.py
 import pytest
-from redteaming.set_up import Model
+from small_model_redteaming.set_up import Model
 
 def test_model_initialization():
     """Test Model class initialization."""
@@ -355,7 +357,7 @@ black src/ tests/ --check
 black src/ tests/
 
 # Type checking
-mypy src/redteaming
+mypy src/small_model_redteaming
 
 # Linting
 flake8 src/ tests/
@@ -364,7 +366,7 @@ flake8 src/ tests/
 isort src/ tests/
 
 # Coverage report
-pytest --cov=redteaming tests/
+pytest --cov=small_model_redteaming tests/
 ```
 
 ---
@@ -463,7 +465,7 @@ pip install git+https://github.com/username/small-model-redteaming.git@v0.1.0
 ```
 MIT License
 
-Copyright (c) 2024 [Your Name]
+Copyright (c) 2025 [Ryan Hartman]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -575,7 +577,7 @@ source test_env/bin/activate  # On Windows: test_env\Scripts\activate
 pip install dist/small_model_redteaming-0.1.0-py3-none-any.whl
 
 # 10. Run smoke test
-python -c "import redteaming; print(redteaming.__version__)"
+python -c "import small_model_redteaming; print(small_model_redteaming.__version__)"
 
 # 11. Deactivate test env
 deactivate
@@ -656,4 +658,4 @@ For questions about packaging or publication:
 
 ---
 
-*Last Updated: 2024*
+*Last Updated: 2025*
