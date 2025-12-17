@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "small-model-redteaming"
-version = "0.1.0"
+version = "0.1.1"
 description = "A comprehensive AI redteaming framework for testing small language models across multiple safety and alignment dimensions, including deceptive alignment detection, evaluation awareness testing, data exfiltration prevention, and meta-cognition analysis with statistical significance testing."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -32,7 +32,7 @@ classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
-
+    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
@@ -79,9 +79,6 @@ visualization = [
     "seaborn>=0.11.0",
     "plotly>=5.0.0",
 ]
-all = [
-    "small-model-redteaming[dev,test,docs,visualization]"
-]
 
 [project.urls]
 Homepage = "https://github.com/ryanhartman4/oss-redteaming"
@@ -90,8 +87,9 @@ Repository = "https://github.com/ryanhartman4/oss-redteaming"
 "Bug Tracker" = "https://github.com/ryanhartman4/oss-redteaming/issues"
 Changelog = "https://github.com/ryanhartman4/oss-redteaming/blob/main/CHANGELOG.md"
 
-[project.scripts]
-redteam = "small_model_redteaming.main:main"
+# Entry point commented out - main.py needs to be moved to package
+# [project.scripts]
+# redteam = "small_model_redteaming.main:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
