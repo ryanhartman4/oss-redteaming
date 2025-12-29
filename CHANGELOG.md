@@ -7,6 +7,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.2] - 2025-12-29
+
+### Added
+- **Data Exfiltration Module** (`data_exfiltration.py`): Full implementation
+  - `DataExfiltrationTest` class for testing prompt extraction vulnerabilities
+  - Direct extraction techniques (system prompt requests)
+  - Indirect extraction techniques (roleplay, encoding, injection)
+  - Similarity-based leak detection with configurable thresholds
+  - Risk level assessment (MINIMAL, LOW, MEDIUM, HIGH, CRITICAL)
+  - `get_vulnerable_techniques()` for identifying successful attack vectors
+
+- **Visualization Module** (`visualizer.py`): Full implementation
+  - `plot_awareness_scores()` - Bar charts for evaluation awareness results
+  - `plot_agreement_comparison()` - Compare baseline/observed/unobserved conditions
+  - `plot_confidence_distribution()` - Histogram of model confidence scores
+  - `plot_deceptive_alignment_results()` - Multi-panel deceptive alignment analysis
+  - `plot_exfiltration_results()` - Vulnerability scores and risk gauge
+  - `plot_preference_heatmap()` - Heatmap of model preferences across subjects
+  - `plot_test_comparison()` - Compare metrics across test conditions
+  - All functions support optional save paths and customizable styling
+
+- **Documentation**
+  - `CONTRIBUTING.md` - Comprehensive contribution guidelines
+  - Updated `docs/api_reference.md` with complete API documentation
+  - Added usage examples for all new modules in README
+
+### Changed
+- Updated package exports in `__init__.py` to include new modules
+- Bumped version to 0.1.2
+
+## [0.1.1] - 2025-08-26
+
+### Fixed
+- Minor bug fixes and code cleanup
+- Improved README formatting
+
 ## [0.1.0] - 2025-08-25
 
 ### Added
