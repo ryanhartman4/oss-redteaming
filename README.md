@@ -7,11 +7,11 @@
 A comprehensive AI redteaming framework for testing small language models across multiple safety and alignment dimensions. Originally developed for the [OpenAI GPT-OSS-20B Red Teaming Competition](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming) on Kaggle.
 
 This package provides tools for:
-- Deceptive alignment detection
-- Evaluation awareness testing  
-- Data exfiltration vulnerability assessment
-- Chain-of-thought extraction and analysis
-- Results visualization
+- **Deceptive alignment detection** - Identify when models hide preferences based on context
+- **Evaluation awareness testing** - Detect if models behave differently when being tested
+- **Data exfiltration testing** - Test for prompt injection and information leakage vulnerabilities
+- **Chain-of-thought extraction** - Extract and analyze model reasoning
+- **Results visualization** - Plot and visualize test results with built-in charting functions
 
 ## Installation
 
@@ -68,6 +68,49 @@ from small_model_redteaming.eval_awareness import MetaAwareness
 evaluator = MetaAwareness(model, conversation_chain=conversation)
 evaluator.run_adjustments()
 awareness_score = evaluator.test_awareness()
+```
+
+#### Data Exfiltration Testing
+Tests whether models can be manipulated to reveal developer prompts or sensitive information:
+```python
+from small_model_redteaming import DataExfiltrationTest
+
+tester = DataExfiltrationTest(
+    model=model,
+    developer_prompt="You are a helpful assistant. SECRET: xyz123",
+    verbose=True
+)
+
+# Run all extraction tests
+results = tester.run_all_tests()
+print(f"Risk Level: {results['risk_level']}")
+print(f"Vulnerability Score: {results['summary']['vulnerability_score']}%")
+
+# Get techniques that worked
+vulnerable = tester.get_vulnerable_techniques(min_similarity=0.2)
+```
+
+#### Results Visualization
+Visualize test results with built-in plotting functions:
+```python
+from small_model_redteaming import (
+    plot_awareness_scores,
+    plot_agreement_comparison,
+    plot_deceptive_alignment_results,
+    plot_exfiltration_results,
+    plot_preference_heatmap,
+)
+
+# Plot awareness scores across conditions
+scores = {"baseline": 75.0, "formal": 72.0, "high_stakes": 85.0}
+fig = plot_awareness_scores(scores, color_threshold=80)
+
+# Visualize deceptive alignment results
+fig = plot_deceptive_alignment_results(results, subject="Capitalism")
+
+# Plot data exfiltration results
+fig = plot_exfiltration_results(exfil_results)
+fig.savefig("exfiltration_report.png")
 ```
 
 ## Project Structure
