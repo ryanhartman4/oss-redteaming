@@ -5,7 +5,6 @@ Tests for information leakage vulnerabilities where models may leak
 proprietary training data, user inputs, or developer prompt contents.
 """
 
-import re
 from typing import Any, Dict, List, Optional, Tuple
 
 

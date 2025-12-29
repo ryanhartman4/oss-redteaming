@@ -40,7 +40,13 @@ def _apply_style() -> None:
     if HAS_SEABORN:
         sns.set_theme(style="whitegrid", palette="husl")
     else:
-        plt.style.use("seaborn-v0_8-whitegrid")
+        # Try multiple style names for matplotlib compatibility
+        for style in ["seaborn-v0_8-whitegrid", "seaborn-whitegrid", "ggplot"]:
+            try:
+                plt.style.use(style)
+                break
+            except OSError:
+                continue
 
 
 def plot_awareness_scores(
@@ -76,6 +82,20 @@ def plot_awareness_scores(
     _apply_style()
 
     fig, ax = plt.subplots(figsize=figsize)
+
+    # Handle empty input
+    if not scores:
+        ax.text(
+            0.5,
+            0.5,
+            "No data to display",
+            ha="center",
+            va="center",
+            transform=ax.transAxes,
+            fontsize=14,
+        )
+        ax.set_title(title, fontsize=14, fontweight="bold")
+        return fig
 
     conditions = list(scores.keys())
     values = list(scores.values())
@@ -264,6 +284,20 @@ def plot_confidence_distribution(
 
     fig, ax = plt.subplots(figsize=figsize)
 
+    # Handle empty input
+    if not confidences:
+        ax.text(
+            0.5,
+            0.5,
+            "No data to display",
+            ha="center",
+            va="center",
+            transform=ax.transAxes,
+            fontsize=14,
+        )
+        ax.set_title(title, fontsize=14, fontweight="bold")
+        return fig
+
     confidences_array = np.array(confidences)
 
     if HAS_SEABORN:
@@ -313,8 +347,8 @@ def plot_confidence_distribution(
 
         # Add mean line
         ax.axvline(x=mean_val, color="#e74c3c", linestyle="--", label="Mean")
+        ax.legend()
 
-    ax.legend()
     plt.tight_layout()
 
     if save_path:
@@ -548,7 +582,6 @@ def plot_exfiltration_results(
 
     # Highlight current risk level
     if risk_level in risk_positions:
-        current_pos = risk_positions[risk_level]
         ax2.bar(
             [risk_level],
             [1],
@@ -613,6 +646,20 @@ def plot_preference_heatmap(
     _apply_style()
 
     fig, ax = plt.subplots(figsize=figsize)
+
+    # Handle empty input
+    if not preferences:
+        ax.text(
+            0.5,
+            0.5,
+            "No data to display",
+            ha="center",
+            va="center",
+            transform=ax.transAxes,
+            fontsize=14,
+        )
+        ax.set_title(title, fontsize=14, fontweight="bold")
+        return fig
 
     subjects = list(preferences.keys())
     values = np.array([[preferences[s] for s in subjects]])
@@ -686,6 +733,20 @@ def plot_test_comparison(
     _apply_style()
 
     fig, ax = plt.subplots(figsize=figsize)
+
+    # Handle empty input
+    if not test_results:
+        ax.text(
+            0.5,
+            0.5,
+            "No data to display",
+            ha="center",
+            va="center",
+            transform=ax.transAxes,
+            fontsize=14,
+        )
+        ax.set_title(title, fontsize=14, fontweight="bold")
+        return fig
 
     conditions = list(test_results.keys())
     values = [test_results[c].get(metric, 0) for c in conditions]
